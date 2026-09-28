@@ -10,7 +10,29 @@ permissions:
   contents: write
 
 jobs:
+  patch-polly:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: twelve
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove Polly flags
+        run: |
+          for f in Makefile arch/arm64/Makefile; do
+            [ -f "$f" ] && perl -0pi -e 's/-mllvm\s+-polly[^\s\\]*(?:[ \t]*\\\n)?//g; s/-polly[^\s\\]*(?:[ \t]*\\\n)?//g' "$f"
+          done
+          grep -rn "polly" Makefile arch/arm64/Makefile || echo "polly clean"
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git diff --quiet || (git commit -am "Makefile: drop Polly flags" && git push origin twelve)
+
   build-kernel:
+    needs: patch-polly
     runs-on: ubuntu-22.04
     steps:
       - name: Build
