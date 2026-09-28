@@ -709,16 +709,7 @@ endif # $(dot-config)
 
 ifdef CONFIG_LLVM_POLLY
 ifeq ($(cc-name),clang)
-KBUILD_CFLAGS	+= -mllvm -polly \
-		   -mllvm -polly-run-dce \
-		   -mllvm -polly-run-inliner \
-		   -mllvm -polly-reschedule=1 \
-		   -mllvm -polly-loopfusion-greedy=1 \
-		   -mllvm -polly-postopts=1 \
-		   -mllvm -polly-ast-use-context \
-		   -mllvm -polly-detect-keep-going \
-		   -mllvm -polly-vectorizer=stripmine \
-		   -mllvm -polly-invariant-load-hoisting
+KBUILD_CFLAGS	+= 		   		   		   		   		   		   		   		   		   
 else
 KBUILD_CFLAGS	+=
 endif
